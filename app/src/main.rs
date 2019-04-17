@@ -1,6 +1,8 @@
+#![feature(core_intrinsics)]
 #![no_std]
 #![no_main]
 
+use core::intrinsics;
 use rt::entry;
 
 entry!(main);
@@ -14,7 +16,5 @@ fn main() -> ! {
     let _y = unsafe { &BSS };
     let _z = unsafe { &DATA };
 
-    loop {}
+    unsafe { intrinsics::abort() }
 }
-
-
