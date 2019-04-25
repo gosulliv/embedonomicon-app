@@ -10,6 +10,7 @@ MEMORY
 ENTRY(Reset);
 
 EXTERN(RESET_VECTOR);
+EXTERN(EXCEPTIONS);
 
 SECTIONS
 {
@@ -21,6 +22,7 @@ SECTIONS
     /* Second entry: reset vector */
     KEEP(*(.vector_table.reset_vector));
 
+    /* The next 14 entries are exception vectors */
     KEEP(*(.vector_table.exceptions));
   } > FLASH
 
