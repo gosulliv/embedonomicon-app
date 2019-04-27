@@ -18,3 +18,9 @@ fn main() -> ! {
 
     unsafe { intrinsics::abort() }
 }
+
+#[allow(non_snake_case)]
+#[no_mangle]
+pub fn HardFault(_ef: *const u32) -> ! {
+    loop {}
+}
