@@ -2,25 +2,41 @@
 #![no_std]
 #![no_main]
 
-use core::intrinsics;
+#![no_main]
+#![no_std]
+
+use cortex_m_semihosting::{
+    debug,
+    hio::{self, HStdout},
+};
+
+use log::{log, Log};
 use rt::entry;
+
+struct Logger {
+    hstdout: HStdout,
+}
+
+impl Log for Logger {
+    type Error = ();
+
+    fn log(&mut self, address: u8) -> Result<(), ()> {
+        self.hstdout.write_all(&[address])
+    }
+}
 
 entry!(main);
 
-static RODATA: &[u8] = b"Hello, world!";
-static mut BSS: u8 = 0;
-static mut DATA: u16 = 1;
-
 fn main() -> ! {
-    let _x = RODATA;
-    let _y = unsafe { &BSS };
-    let _z = unsafe { &DATA };
+    let hstdout = hio::hstdout().unwrap();
+    let mut logger = Logger { hstdout };
 
-    unsafe { intrinsics::abort() }
-}
+    log!(logger, "Hello, world!");
 
-#[allow(non_snake_case)]
-#[no_mangle]
-pub fn HardFault(_ef: *const u32) -> ! {
+    log!(logger, "Goodbye");
+
+    debug::exit(debug::EXIT_SUCCESS);
+
     loop {}
 }
+
