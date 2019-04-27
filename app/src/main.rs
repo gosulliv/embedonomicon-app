@@ -10,7 +10,7 @@ use cortex_m_semihosting::{
     hio::{self, HStdout},
 };
 
-use log::{log, Log};
+use log::{warn, error, Log};
 use rt::entry;
 
 struct Logger {
@@ -31,9 +31,9 @@ fn main() -> ! {
     let hstdout = hio::hstdout().unwrap();
     let mut logger = Logger { hstdout };
 
-    log!(logger, "Hello, world!");
+    warn!(logger, "Hello, world!");
 
-    log!(logger, "Goodbye");
+    error!(logger, "Goodbye");
 
     debug::exit(debug::EXIT_SUCCESS);
 
